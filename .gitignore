@@ -42,7 +42,7 @@ bin/
 /nbbuild/
 /dist/
 /nbdist/
-/.nb-gradle/
+.nb-gradle/
 
 # -------------------------------
 # System & OS Files
@@ -73,12 +73,14 @@ Desktop.ini
 *.rej
 
 # -------------------------------
-# Environment Files
+# Environment & Config Files
 # -------------------------------
 
-# Local environment configuration
-.env
-.env.*
+# Ignore all environment files anywhere
+**/.env
+**/.env.*
+
+# Ignore all Spring Boot application config files anywhere
 **/application*.yml
 **/application*.yaml
 **/application*.properties
