@@ -79,9 +79,9 @@ Desktop.ini
 # Local environment configuration
 .env
 .env.*
-**/application-*.yml
-**/application-*.yaml
-**/application-*.properties
+**/application*.yml
+**/application*.yaml
+**/application*.properties
 
 # -------------------------------
 # Dependencies
