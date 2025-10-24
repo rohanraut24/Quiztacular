@@ -1,0 +1,134 @@
+# -------------------------------
+# Java & Spring Boot .gitignore
+# -------------------------------
+
+# Maven target directory
+/target/
+
+# Gradle build directories
+/build/
+.gradle/
+
+# Spring Boot specific
+*.log
+*.pid
+*.seed
+*.out
+*.gz
+
+# -------------------------------
+# IDEs & Editors
+# -------------------------------
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# -------------------------------
+# System & OS Files
+# -------------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# -------------------------------
+# Logs & Temporary Files
+# -------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.rej
+
+# -------------------------------
+# Environment Files
+# -------------------------------
+
+# Local environment configuration
+.env
+.env.*
+application-*.yml
+application-*.yaml
+application-*.properties
+
+# -------------------------------
+# Dependencies
+# -------------------------------
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# -------------------------------
+# Testing
+# -------------------------------
+
+# JUnit test reports
+/test-output/
+/surefire-reports/
+/failsafe-reports/
+
+# Coverage reports
+/coverage/
+*.lcov
+
+# -------------------------------
+# Others
+# -------------------------------
+
+# Temporary project files
+*.idea_modules
+*.hprof
+*.orig
+*.rej
+
+# Backup
+*.bak
+*.old
+
+# -------------------------------
+# Git itself
+# -------------------------------
+
+# Ignore gitignore (recursive issue fix)
+.gitignore
+
+# -------------------------------
+# End of file
+# -------------------------------
