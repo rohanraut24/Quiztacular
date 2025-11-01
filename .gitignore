@@ -81,9 +81,9 @@ Desktop.ini
 **/.env.*
 
 # Ignore all Spring Boot application config files anywhere
-**/application*.yml
-**/application*.yaml
-**/application*.properties
+# **/application*.yml
+# **/application*.yaml
+# **/application*.properties
 
 # -------------------------------
 # Dependencies
