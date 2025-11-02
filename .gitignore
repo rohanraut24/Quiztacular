@@ -4,6 +4,7 @@
 
 # Maven target directory
 /target/
+**/target/
 
 # Gradle build directories
 /build/
