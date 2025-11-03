@@ -20,7 +20,7 @@ public class EnvLoader implements ApplicationContextInitializer<ConfigurableAppl
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
 
 
-        File envFile = new File(".env");
+        File envFile = new File("src/.env");
 
         if (envFile.exists()) {
             try {

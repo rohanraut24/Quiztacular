@@ -1,0 +1,3 @@
+# Register the EnvLoader to load .env file before application starts
+org.springframework.context.ApplicationContextInitializer=\
+rohan.authService.config.EnvLoader
