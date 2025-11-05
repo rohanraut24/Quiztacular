@@ -40,11 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(jwt)) {
                 String username = jwtUtil.extractUsername(jwt);
+                Long userId = jwtUtil.extractUserId(jwt);  // ← Extract userId
 
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                username, null, new ArrayList<>()
-                        );
+                // Create custom authentication with userId
+                UserAuthenticationToken authToken =
+                        new UserAuthenticationToken(username, userId);
 
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

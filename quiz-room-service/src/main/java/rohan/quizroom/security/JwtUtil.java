@@ -18,6 +18,11 @@ public class JwtUtil {
         return extractAllClaims(token).getSubject();
     }
 
+    // NEW: Extract userId from JWT
+    public Long extractUserId(String token) {
+        return extractAllClaims(token).get("userId", Long.class);
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser()

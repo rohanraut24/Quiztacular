@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
+import rohan.quizroom.security.UserAuthenticationToken;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -39,10 +40,11 @@ public class RoomManagerService {
     public RoomCreatedResponse createRoom(CreateRoomRequest request, String username) {
         log.info("Creating room: {} by {}", request.getRoomName(), username);
 
-        // Generate unique room code
+        // Get user ID from security context
+        Long userId = getCurrentUserId();
+
         String roomCode = generateRoomCode();
 
-        // Fetch questions from Trivia API
         Integer categoryId = triviaApiService.getCategoryId(request.getCategory());
         TriviaApiResponse triviaResponse = triviaApiService.fetchQuiz(
                 categoryId,
@@ -50,11 +52,10 @@ public class RoomManagerService {
                 request.getTotalQuestions()
         );
 
-        // Create room
         QuizRoom room = new QuizRoom();
         room.setRoomCode(roomCode);
         room.setRoomName(request.getRoomName());
-        room.setHostUserId(1L); // TODO: Get from JWT
+        room.setHostUserId(userId);  // ✅ FIXED: Use real user ID
         room.setHostUsername(username);
         room.setCategory(request.getCategory());
         room.setDifficulty(request.getDifficulty());
@@ -74,12 +75,12 @@ public class RoomManagerService {
         // Add host as first player
         RoomPlayer host = new RoomPlayer();
         host.setRoom(room);
-        host.setUserId(1L); // TODO: Get from JWT
+        host.setUserId(userId);  // ✅ FIXED: Use real user ID
         host.setUsername(username);
-        host.setIsReady(true); // Host is always ready
+        host.setIsReady(true);
         playerRepository.save(host);
 
-        log.info("Room created: {} by {}", roomCode, username);
+        log.info("Room created: {} by {} (userId: {})", roomCode, username, userId);
 
         return new RoomCreatedResponse(
                 roomCode,
@@ -110,26 +111,23 @@ public class RoomManagerService {
             throw new RuntimeException("Room is full");
         }
 
-        Long userId = 1L; // TODO: Get from JWT
+        Long userId = getCurrentUserId();  // ✅ FIXED: Use real user ID
 
-        // Check if already in room
         if (playerRepository.existsByRoomIdAndUserId(room.getId(), userId)) {
             throw new RuntimeException("Already in this room");
         }
 
-        // Add player
         RoomPlayer player = new RoomPlayer();
         player.setRoom(room);
-        player.setUserId(userId);
+        player.setUserId(userId);  // ✅ FIXED: Use real user ID
         player.setUsername(username);
         playerRepository.save(player);
 
         room.setCurrentPlayers(room.getCurrentPlayers() + 1);
         roomRepository.save(room);
 
-        log.info("{} joined room: {}", username, request.getRoomCode());
+        log.info("{} joined room: {} (userId: {})", username, request.getRoomCode(), userId);
 
-        // Broadcast room update to all players
         broadcastRoomUpdate(room);
     }
 
@@ -381,6 +379,7 @@ public class RoomManagerService {
             log.info("Cleaned up stale room: {}", room.getRoomCode());
         }
     }
+
     /**
      * Handle player answer submission
      */
@@ -533,5 +532,20 @@ public class RoomManagerService {
     public QuizRoom getRoomByCode(String roomCode) {
         return roomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
+    }
+
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth instanceof UserAuthenticationToken) {
+            return ((UserAuthenticationToken) auth).getUserId();
+        }
+
+        throw new RuntimeException("Unable to get user ID from authentication");
+    }
+
+    private String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 }
