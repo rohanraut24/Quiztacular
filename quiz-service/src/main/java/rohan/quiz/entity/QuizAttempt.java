@@ -18,44 +18,44 @@ public class QuizAttempt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String difficulty;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer totalQuestions;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer correctAnswers;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer score;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDateTime startTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime endTime;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long timeTakenSeconds;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private QuizStatus status;
 
     @Column(columnDefinition = "TEXT")
     private String questionsData; // JSON string of questions and answers
 
-    @Column(name = "created_at", updatable = false)
+//    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum QuizStatus {
@@ -67,10 +67,12 @@ public class QuizAttempt {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        if (this.status == null) {
-            this.status = QuizStatus.IN_PROGRESS;
-        }
+        if (this.status == null) this.status = QuizStatus.IN_PROGRESS;
+        if (this.correctAnswers == null) this.correctAnswers = 0;
+        if (this.score == null) this.score = 0;
+        if (this.timeTakenSeconds == null) this.timeTakenSeconds = 0L;
     }
+
 
     // Calculate score percentage
     public double getScorePercentage() {

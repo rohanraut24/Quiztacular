@@ -63,18 +63,32 @@ public class TriviaApiService {
      * Get category ID from category name
      */
     public Integer getCategoryId(String categoryName) {
-        return switch (categoryName.toLowerCase()) {
-            case "general" -> 9;
-            case "computers" -> 18;
-            case "mathematics" -> 19;
-            case "sports" -> 21;
-            case "geography" -> 22;
-            case "history" -> 23;
-            case "politics" -> 24;
-            case "animals" -> 27;
-            case "science" -> 17;
-            case "music" -> 12;
-            default -> null; // Any category
-        };
-    }
+    return switch (categoryName.toLowerCase()) {
+        case "general" -> 9;
+        case "books" -> 10;
+        case "film" -> 11;
+        case "music" -> 12;
+        case "musicals" -> 13;
+        case "television" -> 14;
+        case "videogames", "video games" -> 15;
+        case "boardgames", "board games" -> 16;
+        case "science", "science & nature" -> 17;
+        case "computers" -> 18;
+        case "mathematics" -> 19;
+        case "mythology" -> 20;
+        case "sports" -> 21;
+        case "geography" -> 22;
+        case "history" -> 23;
+        case "politics" -> 24;
+        case "art" -> 25;
+        case "celebrities" -> 26;
+        case "animals" -> 27;
+        case "vehicles" -> 28;
+        case "comics" -> 29;
+        case "gadgets" -> 30;
+        case "anime", "japanese anime & manga" -> 31;
+        case "cartoon", "cartoons", "cartoon & animations" -> 32;
+        default -> null;
+    };
+}
 }
