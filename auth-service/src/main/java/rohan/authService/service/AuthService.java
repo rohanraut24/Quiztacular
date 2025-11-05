@@ -82,7 +82,7 @@ public class AuthService {
                         .toArray(String[]::new))
                 .build();
 
-        String token = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails, savedUser.getId());
 
         List<String> roleNames = savedUser.getRoles().stream()
                 .map(role -> role.getName().name())
@@ -101,10 +101,10 @@ public class AuthService {
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtService.generateToken(userDetails);
-
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtService.generateToken(userDetails, user.getId());
 
         List<String> roles = user.getRoles().stream()
                 .map(role -> role.getName().name())
@@ -116,5 +116,6 @@ public class AuthService {
 
     public boolean validateToken(String token) {
         return jwtService.validateToken(token);
+
     }
 }

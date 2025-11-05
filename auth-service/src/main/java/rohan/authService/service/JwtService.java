@@ -22,21 +22,25 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
+    // UPDATED: Add user ID to JWT claims
+    public String generateToken(UserDetails userDetails, Long userId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);  // ← Add userId to JWT
+        return buildToken(claims, userDetails, jwtExpiration);
+    }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    // NEW: Extract userId from JWT
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
-    }
-
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
     private String buildToken(
