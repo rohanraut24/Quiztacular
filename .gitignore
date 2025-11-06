@@ -135,3 +135,74 @@ Desktop.ini
 # -------------------------------
 # End of file
 # -------------------------------
+
+
+# Frontend
+# ------------------------------------------------------
+# Node.js / Vite / React / TypeScript Frontend GitIgnore
+# ------------------------------------------------------
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Temporary and cache files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+*.eslintcache
+.vite/
+vite.config.ts.timestamp*
+vite.config.js.timestamp*
+
+# Local environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor / IDE directories
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# OS specific files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Tailwind and PostCSS cache
+.postcssrc.*
+tailwind.config.js.timestamp*
+tailwind.config.cjs.timestamp*
+
+# Coverage reports
+coverage/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Misc
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
+
+# Local testing / preview
+*.local
+vite.lock
+
+# ------------------------------------------------------
+# End of .gitignore
+# ------------------------------------------------------
