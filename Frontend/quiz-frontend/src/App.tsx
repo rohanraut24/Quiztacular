@@ -1,35 +1,134 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
+import {Navbar} from './components/Navbar';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Import pages
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import {SignupPage} from './pages/SignupPage';
+import {Dashboard} from './pages/Dashboard';
+import {SoloQuizSetup} from './pages/SoloQuizSetup';
+import SoloQuizPlay from './pages/SoloQuizPlay';
+import {MultiplayerBrowser} from './pages/MultiplayerBrowser';
+import {CreateRoom} from './pages/CreateRoom';
+import HistoryPage from './pages/HistoryPage';
+import {LeaderboardPage} from './pages/LeaderboardPage';
+import {ProfilePage} from './pages/ProfilePage';
+
+// Protected Route Component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+};
+
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {isAuthenticated && <Navbar />}
+      
+      <Routes>
+        <Route 
+          path="/" 
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />} 
+        />
+        <Route 
+          path="/login" 
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />} 
+        />
+        <Route 
+          path="/signup" 
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <SignupPage />} 
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/solo-quiz"
+          element={
+            <ProtectedRoute>
+              <SoloQuizSetup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/solo-quiz/play"
+          element={
+            <ProtectedRoute>
+              <SoloQuizPlay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/multiplayer"
+          element={
+            <ProtectedRoute>
+              <MultiplayerBrowser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/multiplayer/create"
+          element={
+            <ProtectedRoute>
+              <CreateRoom />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
